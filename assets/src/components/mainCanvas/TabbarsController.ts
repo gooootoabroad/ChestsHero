@@ -8,6 +8,7 @@ import { _decorator, Component, Node } from 'cc';
 import { AudioMgr } from '../../manager/AudioMgr';
 import { Bundle } from '../../global/bundle';
 import { AudioClip } from 'cc';
+import { instantiate } from 'cc';
 const { ccclass, property } = _decorator;
 
 // 全局存放坐标
@@ -18,6 +19,7 @@ class TabbarItem {
     @property(Prefab)
     ItemPrefab: Prefab;
 
+    // 对应prefab加载出来的界面
     node: Node;
 }
 
@@ -36,9 +38,9 @@ export class TabbarsController extends Component {
     private gSelectedIndex: number = 0;
 
     protected start(): void {
-        this.gTabbarsNode.children.forEach((child, index) => {
-            this.gItemsInfo[index].node = child;
-        })
+        // this.gTabbarsNode.children.forEach((child, index) => {
+        //     this.gItemsInfo[index].node = child;
+        // })
 
         // 设置默认选中节点
         this.gSelectedIndex = Math.floor(this.gTabbarsNode.children.length / 2);
@@ -78,6 +80,8 @@ export class TabbarsController extends Component {
             }
             tween(title).to(durtaion, { scale: titleScale }).call(() => { title.active = isSelected }).start();
         })
+
+        this.loadPrefab();
     }
 
     private onTouchEnd(event: EventTouch) {
@@ -92,6 +96,27 @@ export class TabbarsController extends Component {
                     this.updateSelectItem();
                 }
                 break;
+            }
+        }
+    }
+
+    private loadPrefab() {
+        let selectInfo = this.gItemsInfo[this.gSelectedIndex];
+        if (!selectInfo.node) {
+            // TODO 其他的预制体
+            if (this.gSelectedIndex != 0) return;
+            selectInfo.node = instantiate(selectInfo.ItemPrefab);
+            selectInfo.node.parent = this.gContainerNode;
+        }
+
+        // 设置优先级
+        selectInfo.node.setSiblingIndex(-1);
+
+        // 关闭其他节点
+        for (let i = 0; i < this.gItemsInfo.length; i++) {
+            const item = this.gItemsInfo[i];
+            if (item.node) {
+                item.node.active = i === this.gSelectedIndex;
             }
         }
     }

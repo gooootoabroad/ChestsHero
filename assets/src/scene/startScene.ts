@@ -77,7 +77,7 @@ export class startScene extends Component {
         // Bundle.monster = await LoadMgr.loadBundle(BundleName.Monster);
         // this._targetProgress = 0.8;
 
-        // await LoadMgr.loadDir(Bundle.game, 'prefab', Prefab);
+        await LoadMgr.loadDir(Bundle.mainCanvas, 'prefabs', Prefab);
         this._updateProgress(0.9);
         await LoadMgr.loadScene(SceneName.Main);
     }

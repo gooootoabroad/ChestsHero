@@ -2,7 +2,7 @@ import { updateDynamicCompositeImage } from "../utils/dynamicCompositeImage";
 
 // 游戏配置
 export const GConfig = {
-    testing: false,
+    testing: true,
     noAD: false,
 }
 
