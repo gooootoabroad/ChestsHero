@@ -6,4 +6,5 @@ export const GEventTarget = new EventTarget();
 
 export enum GEventType {
     GEventGameMusicChange,
+    GeventDiamondChange,
 }
