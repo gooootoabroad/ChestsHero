@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "疾风套装",
+    "needCount": 4,
+    "setSkill": "四件套激活：战斗力+120",
+    "setPower": 120
+  },
+  {
+    "id": 2,
+    "name": "山岳套装",
+    "needCount": 4,
+    "setSkill": "四件套激活：战斗力+150",
+    "setPower": 150
+  },
+  {
+    "id": 3,
+    "name": "圣盾套装",
+    "needCount": 4,
+    "setSkill": "四件套激活：战斗力+140",
+    "setPower": 140
+  },
+  {
+    "id": 4,
+    "name": "追猎套装",
+    "needCount": 4,
+    "setSkill": "四件套激活：战斗力+130",
+    "setPower": 130
+  },
+  {
+    "id": 5,
+    "name": "王权套装",
+    "needCount": 4,
+    "setSkill": "四件套激活：战斗力+180",
+    "setPower": 180
+  }
+]
