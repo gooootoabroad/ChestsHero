@@ -8,7 +8,10 @@ import { GIFController } from '../../GIFController';
 import { assetManager } from 'cc';
 import { SpriteFrame } from 'cc';
 import { Sprite } from 'cc';
+import { instantiate } from 'cc';
 import { LoadMgr } from '../../../manager/LoadMgr';
+import { EquipmentCatalogMgr } from '../../../manager/EquipmentCatalogMgr';
+import { EquipmentDropMgr } from '../../../manager/EquipmentDropMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('chestAnimation')
@@ -36,6 +39,32 @@ export class chestAnimation extends Component {
     private gShadowNode: Node = null;
     private gIsPlayingShadow: boolean = false;
 
+    @property(Node)
+    private gTimeNode: Node = null;
+
+    @property(Node)
+    private gStarNode: Node = null;
+
+    @property
+    private gMaxOpenTimes = 4;
+
+    @property
+    private gMaxStar = 5;
+
+    @property
+    private gBaseUpgradeChance = 0.35;
+
+    @property
+    private gUpgradeChancePerStar = 0.03;
+
+    private gRemainingOpenTimes = 0;
+    private gCurrentStar = 1;
+    private gIsOpening = false;
+
+    private gTimeAvailableFrame: SpriteFrame = null;
+    private gTimeUsedFrame: SpriteFrame = null;
+    private gStarItemTemplate: Node = null;
+
     onLoad() {
         this.gImageSprite = this.node.getComponent(Sprite);
         this._originScale = this.node.scale.clone();
@@ -60,6 +89,8 @@ export class chestAnimation extends Component {
         this.gShadowNode.opacity = 0;
 
         this.node.on(Node.EventType.TOUCH_END, this.onClick, this);
+
+        this.bindSiblingNodes();
     }
 
     protected onDestroy(): void {
@@ -68,6 +99,7 @@ export class chestAnimation extends Component {
 
     start() {
         this.playIdle();
+        this.initProgress();
     }
 
     playIdle() {
@@ -237,13 +269,32 @@ export class chestAnimation extends Component {
 
     /** 点击宝箱 */
     onClick() {
-        if (this.isRotating || !this.gGIFController) return;
+        if (this.isRotating || this.gIsOpening || !this.gGIFController) {
+            return;
+        }
 
-        this.playRotate();
+        // 前 4 次点击：只做开箱流程与星级成长
+        if (this.gRemainingOpenTimes > 0) {
+            this.gIsOpening = true;
+            this.playRotate(() => {
+                this.consumeOneChance();
+                this.tryUpgradeStar();
+                this.refreshTimeView();
+                this.refreshStarView();
+                this.gIsOpening = false;
+            });
+            return;
+        }
+
+        // 第 5 次点击：进入出装结算
+        this.gIsOpening = true;
+        this.handleOpenRewardTodo().finally(() => {
+            this.gIsOpening = false;
+        });
     }
 
     /** 播放旋转动画 */
-    playRotate() {
+    playRotate(onFinish?: () => void) {
 
         this.isRotating = true;
 
@@ -257,6 +308,7 @@ export class chestAnimation extends Component {
             this.playShadow();
             this.isRotating = false;
             this.playIdle();
+            onFinish?.();
         }
 
         this.gGIFController.play('a', false, callback, true);
@@ -272,6 +324,126 @@ export class chestAnimation extends Component {
             this.gShadowNode.scale = v3(1, 1, 1,); this.gIsPlayingShadow = false;
         }).start();
     }
+
+    private bindSiblingNodes() {
+        const chestNode = this.node.parent;
+        if (!chestNode) {
+            return;
+        }
+        if (!this.gTimeNode) {
+            this.gTimeNode = chestNode.getChildByName("Time");
+        }
+        if (!this.gStarNode) {
+            this.gStarNode = chestNode.getChildByName("Star");
+        }
+    }
+
+    private async initProgress() {
+        this.gRemainingOpenTimes = this.gMaxOpenTimes;
+        this.gCurrentStar = 1;
+        await this.cacheTimeFrames();
+        this.cacheStarTemplate();
+        this.ensureStarSlots();
+        this.refreshTimeView();
+        this.refreshStarView();
+    }
+
+    private getSortedTimeNodes(): Node[] {
+        if (!this.gTimeNode) {
+            return [];
+        }
+        return [...this.gTimeNode.children].sort((a, b) => a.position.x - b.position.x);
+    }
+
+    private async cacheTimeFrames() {
+        const timeNodes = this.getSortedTimeNodes();
+        if (timeNodes.length <= 0) {
+            return;
+        }
+
+        await LoadMgr.loadSpriteFrame(Bundle.mainCanvas, "texture/ui/time").then((sf) => {
+            this.gTimeAvailableFrame = sf;
+        });
+
+        await LoadMgr.loadSpriteFrame(Bundle.mainCanvas, "texture/ui/blackTime").then((sf) => {
+            this.gTimeUsedFrame = sf;
+        });
+    }
+
+    private cacheStarTemplate() {
+        if (!this.gStarNode || this.gStarNode.children.length <= 0) {
+            return;
+        }
+        this.gStarItemTemplate = this.gStarNode.children[0];
+    }
+
+    private ensureStarSlots() {
+        if (!this.gStarNode || !this.gStarItemTemplate) {
+            return;
+        }
+        while (this.gStarNode.children.length < this.gMaxStar) {
+            const newItem = instantiate(this.gStarItemTemplate);
+            newItem.parent = this.gStarNode;
+        }
+    }
+
+    private refreshTimeView() {
+        const timeNodes = this.getSortedTimeNodes();
+        if (timeNodes.length <= 0) {
+            return;
+        }
+        const consumed = Math.max(0, this.gMaxOpenTimes - this.gRemainingOpenTimes);
+        for (let i = 0; i < timeNodes.length; i++) {
+            const sp = timeNodes[i].getComponent(Sprite);
+            if (!sp) {
+                continue;
+            }
+            sp.spriteFrame = i < consumed ? this.gTimeUsedFrame : this.gTimeAvailableFrame;
+        }
+    }
+
+    private refreshStarView() {
+        if (!this.gStarNode) {
+            return;
+        }
+        for (let i = 0; i < this.gStarNode.children.length; i++) {
+            this.gStarNode.children[i].active = i < this.gCurrentStar;
+        }
+    }
+
+    private consumeOneChance() {
+        this.gRemainingOpenTimes = Math.max(0, this.gRemainingOpenTimes - 1);
+    }
+
+    private tryUpgradeStar() {
+        if (this.gCurrentStar >= this.gMaxStar) {
+            return;
+        }
+        const chance = this.getUpgradeChance();
+        if (Math.random() <= chance) {
+            this.gCurrentStar++;
+        }
+    }
+
+    private getUpgradeChance(): number {
+        const starBonus = (this.gCurrentStar - 1) * this.gUpgradeChancePerStar;
+        return Math.max(0, Math.min(1, this.gBaseUpgradeChance - starBonus));
+    }
+
+    private async handleOpenRewardTodo() {
+        try {
+            const dropResult = EquipmentDropMgr.roll({
+                star: this.gCurrentStar,
+                candidatesByType: EquipmentCatalogMgr.getCandidatesByType(),
+            });
+
+            // TODO: 接入“新装备 vs 当前佩戴装备”展示与替换流程，并写入 Core.userInfo.equipments
+            console.log('[Chest] reward flow TODO', {
+                currentStar: this.gCurrentStar,
+                dropResult,
+            });
+        } catch (error) {
+            console.error('[Chest] reward flow error', error);
+        }
+    }
 }
-
-

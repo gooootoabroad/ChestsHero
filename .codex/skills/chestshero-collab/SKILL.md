@@ -21,6 +21,8 @@ Use this skill to make changes that fit the existing ChestsHero architecture ins
 ## Project Rules
 
 - Treat `assets/src/scene/startScene.ts` as the runtime bootstrap. Bundle loading, font and button patching, platform initialization, and the first scene jump happen there.
+- This repository is a Cocos Creator mini-game project. If the `cocos-creator` MCP is available, you may use it to inspect project node, scene, prefab, and component data instead of inferring editor state from files alone.
+- If a task requires changing Cocos nodes, components, prefab instances, scene hierarchy, or other editor state through the `cocos-creator` MCP, ask the user for confirmation every time before applying those MCP edits.
 - Use `assets/src/global/bundle.ts` plus `assets/src/manager/LoadMgr.ts` for runtime asset access. Do not hardcode ad-hoc bundle globals or bypass the existing cache unless there is a strong reason.
 - Use `assets/src/manager/UIMgr.ts` roots consistently:
   - `dialogParent` for modal panels
