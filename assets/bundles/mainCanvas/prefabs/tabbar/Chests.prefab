@@ -4126,7 +4126,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 100,
-      "height": 95.08196721311475
+      "height": 134
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -4219,7 +4219,7 @@
       "a": 255
     },
     "_spriteFrame": null,
-    "_type": 1,
+    "_type": 2,
     "_id": ""
   },
   {
@@ -4673,7 +4673,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Coat",
+    "_name": "Armor",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -5127,7 +5127,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 100,
-      "height": 95.08196721311475
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5220,7 +5220,7 @@
       "a": 255
     },
     "_spriteFrame": null,
-    "_type": 1,
+    "_type": 2,
     "_id": ""
   },
   {
@@ -6128,7 +6128,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 100,
-      "height": 95.08196721311475
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -6221,7 +6221,7 @@
       "a": 255
     },
     "_spriteFrame": null,
-    "_type": 1,
+    "_type": 2,
     "_id": ""
   },
   {
@@ -7128,7 +7128,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 97.29729729729729,
+      "width": 100,
       "height": 100
     },
     "_anchorPoint": {
@@ -7222,7 +7222,7 @@
       "a": 255
     },
     "_spriteFrame": null,
-    "_type": 1,
+    "_type": 2,
     "_id": ""
   },
   {
@@ -10883,7 +10883,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 749.9999999999999,
+      "width": 750,
       "height": 1334
     },
     "_anchorPoint": {

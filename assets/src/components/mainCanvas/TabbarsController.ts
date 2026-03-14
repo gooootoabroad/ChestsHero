@@ -103,8 +103,7 @@ export class TabbarsController extends Component {
     private loadPrefab() {
         let selectInfo = this.gItemsInfo[this.gSelectedIndex];
         if (!selectInfo.node) {
-            // TODO 其他的预制体
-            if (this.gSelectedIndex != 0) return;
+            if (!selectInfo.ItemPrefab) return;
             selectInfo.node = instantiate(selectInfo.ItemPrefab);
             selectInfo.node.parent = this.gContainerNode;
         }

@@ -1,4 +1,4 @@
-import { EquipmentGrade } from "../config/IConfig";
+import { EquipmentGradeType } from "../config/EquipmentGradeConfig";
 import { SaveProp } from "../localstorage/SaveProp";
 import { getTodayDateString } from "../utils/string";
 
@@ -17,6 +17,9 @@ export class UserInfo {
 
     @SaveProp.decorator(0)
     diamond: number;
+
+    @SaveProp.decorator(0)
+    battlePower: number;
 
     //已装备的装备信息
     @SaveProp.decorator({
@@ -125,7 +128,7 @@ export class UserInfoDay {
 export interface IUserEquipmentData {
     id: number;
     star: number;
-    grade: EquipmentGrade;
+    grade: EquipmentGradeType;
     //当获取时随机生成的id
     uid: string;
 }

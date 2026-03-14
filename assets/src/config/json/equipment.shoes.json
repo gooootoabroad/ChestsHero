@@ -1,0 +1,112 @@
+[
+  {
+    "id": 4001,
+    "name": "铁羽疾靴",
+    "type": 4,
+    "ico": "shoes-1",
+    "setId": 1,
+    "setName": "疾风套装",
+    "setSkill": "四件套激活：战斗力+120",
+    "statWeights": {
+      "hp": 0.2,
+      "damage": 0,
+      "defense": 0.15,
+      "agility": 0.65
+    },
+    "starSkills": [
+      "敏捷+10%",
+      "生命+5%",
+      "战斗力+18",
+      "敏捷+18%",
+      "防御+8%"
+    ]
+  },
+  {
+    "id": 4002,
+    "name": "大地战靴",
+    "type": 4,
+    "ico": "shoes-2",
+    "setId": 2,
+    "setName": "山岳套装",
+    "setSkill": "四件套激活：战斗力+150",
+    "statWeights": {
+      "hp": 0.3,
+      "damage": 0,
+      "defense": 0.5,
+      "agility": 0.2
+    },
+    "starSkills": [
+      "防御+8%",
+      "敏捷+6%",
+      "战斗力+22",
+      "生命+10%",
+      "防御+12%"
+    ]
+  },
+  {
+    "id": 4003,
+    "name": "守誓战靴",
+    "type": 4,
+    "ico": "shoes-3",
+    "setId": 3,
+    "setName": "圣盾套装",
+    "setSkill": "四件套激活：战斗力+140",
+    "statWeights": {
+      "hp": 0.35,
+      "damage": 0,
+      "defense": 0.45,
+      "agility": 0.2
+    },
+    "starSkills": [
+      "生命+6%",
+      "防御+8%",
+      "战斗力+20",
+      "敏捷+10%",
+      "防御+15%"
+    ]
+  },
+  {
+    "id": 4004,
+    "name": "迅影轻靴",
+    "type": 4,
+    "ico": "shoes-4",
+    "setId": 4,
+    "setName": "追猎套装",
+    "setSkill": "四件套激活：战斗力+130",
+    "statWeights": {
+      "hp": 0.15,
+      "damage": 0,
+      "defense": 0.1,
+      "agility": 0.75
+    },
+    "starSkills": [
+      "敏捷+12%",
+      "生命+5%",
+      "战斗力+18",
+      "敏捷+20%",
+      "防御+8%"
+    ]
+  },
+  {
+    "id": 4005,
+    "name": "圣痕王靴",
+    "type": 4,
+    "ico": "shoes-5",
+    "setId": 5,
+    "setName": "王权套装",
+    "setSkill": "四件套激活：战斗力+180",
+    "statWeights": {
+      "hp": 0.25,
+      "damage": 0,
+      "defense": 0.45,
+      "agility": 0.3
+    },
+    "starSkills": [
+      "防御+10%",
+      "敏捷+8%",
+      "战斗力+28",
+      "生命+10%",
+      "防御+18%"
+    ]
+  }
+]

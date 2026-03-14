@@ -1,0 +1,4 @@
+interface:
+  display_name: "ChestsHero Collab"
+  short_description: "ChestsHero Cocos小游戏协作开发指引"
+  default_prompt: "Use $chestshero-collab to extend or refactor the ChestsHero Cocos mini-game while preserving its loading, persistence, UI, and platform conventions."

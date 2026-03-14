@@ -1,0 +1,54 @@
+[
+  {
+    "grade": 1,
+    "name": "C",
+    "maxStar": 5,
+    "maxLevel": 20,
+    "gradeLevel": 4,
+    "baseStatBudget": 18,
+    "growthStatBudget": 4,
+    "basePower": 28,
+    "powerGrowth": 6,
+    "upgradeDiamondBase": 40,
+    "upgradeDiamondStep": 15
+  },
+  {
+    "grade": 2,
+    "name": "B",
+    "maxStar": 6,
+    "maxLevel": 30,
+    "gradeLevel": 5,
+    "baseStatBudget": 24,
+    "growthStatBudget": 5,
+    "basePower": 36,
+    "powerGrowth": 8,
+    "upgradeDiamondBase": 80,
+    "upgradeDiamondStep": 25
+  },
+  {
+    "grade": 3,
+    "name": "A",
+    "maxStar": 7,
+    "maxLevel": 40,
+    "gradeLevel": 5,
+    "baseStatBudget": 32,
+    "growthStatBudget": 7,
+    "basePower": 48,
+    "powerGrowth": 10,
+    "upgradeDiamondBase": 140,
+    "upgradeDiamondStep": 40
+  },
+  {
+    "grade": 4,
+    "name": "S",
+    "maxStar": 8,
+    "maxLevel": 50,
+    "gradeLevel": 6,
+    "baseStatBudget": 42,
+    "growthStatBudget": 9,
+    "basePower": 64,
+    "powerGrowth": 14,
+    "upgradeDiamondBase": 240,
+    "upgradeDiamondStep": 60
+  }
+]
