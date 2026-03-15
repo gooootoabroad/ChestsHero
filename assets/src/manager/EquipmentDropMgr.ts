@@ -16,6 +16,7 @@ export interface IEquipmentDropRollResult {
   equipmentType: EquipmentType;
   grade: EquipmentGradeType;
   star: ChestStarLevel;
+  setId: number;
 }
 
 export class EquipmentDropMgr {
@@ -41,6 +42,7 @@ export class EquipmentDropMgr {
       equipmentType,
       grade,
       star,
+      setId: pickedEquipment.setId,
     };
   }
 

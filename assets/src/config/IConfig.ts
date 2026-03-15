@@ -9,15 +9,6 @@ export type MonsterPropertyEnum = typeof MonsterPropertyEnums[number];
 export type MoneyType =
     'Gold' | 'Diamond';
 
-//上衣 鞋 戒指 项链
-export const EquipmentTypes =
-    ['p1', 'p2', 'p3', 'p4'] as const;
-export type EquipmentType = typeof EquipmentTypes[number];
-
-export const EquipmentGrades =
-    ['S', 'A', 'B', 'C'] as const;
-export type EquipmentGrade = typeof EquipmentGrades[number];
-
 export const AchievementTypes =
     ['killMonster', 'passedLevel', 'upgradeEquipment', 'degradeEquipment',
         'buyChestInShop', 'buyCompositesInShop', 'buyInDailyShop', 'buyInDailyReward',

@@ -7,6 +7,8 @@ import { AudioMgr } from '../manager/AudioMgr';
 import { RunScene } from '../controller/RunScene';
 import { SceneName } from '../global/IGame';
 import { EquipmentCatalogMgr } from '../manager/EquipmentCatalogMgr';
+import { EquipmentGradeMgr } from '../manager/EquipmentGradeMgr';
+import { EquipmentSuitMgr } from '../manager/EquipmentSuitMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('startScene')
@@ -56,6 +58,8 @@ export class startScene extends Component {
         await this._initPlatform();
         // 装备数据读取
         await EquipmentCatalogMgr.init();
+        await EquipmentGradeMgr.init();
+        await EquipmentSuitMgr.init();
         // 初始化钩子
         await this._privateFunc();
         this._updateProgress(1, "加载完成，正在进入游戏");

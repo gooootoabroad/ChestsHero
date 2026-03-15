@@ -3,35 +3,35 @@
     "id": 1,
     "name": "疾风套装",
     "needCount": 4,
-    "setSkill": "四件套激活：战斗力+120",
+    "setSkill": "攻击+2000，生命+3000，防御+3000，速度+5000",
     "setPower": 120
   },
   {
     "id": 2,
     "name": "山岳套装",
     "needCount": 4,
-    "setSkill": "四件套激活：战斗力+150",
+    "setSkill": "攻击+3000，生命+4000，防御+6000，速度+2000",
     "setPower": 150
   },
   {
     "id": 3,
     "name": "圣盾套装",
     "needCount": 4,
-    "setSkill": "四件套激活：战斗力+140",
+    "setSkill": "攻击+4000，生命+5000，防御+5000，速度+3000",
     "setPower": 140
   },
   {
     "id": 4,
     "name": "追猎套装",
     "needCount": 4,
-    "setSkill": "四件套激活：战斗力+130",
+    "setSkill": "攻击+7000，生命+3000，防御+1000，速度+5000",
     "setPower": 130
   },
   {
     "id": 5,
     "name": "王权套装",
     "needCount": 4,
-    "setSkill": "四件套激活：战斗力+180",
+    "setSkill": "攻击+10000，生命+8000，防御+8000，速度+5000",
     "setPower": 180
   }
 ]

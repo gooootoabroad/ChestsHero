@@ -40,6 +40,10 @@ export class EquipmentCatalogMgr {
     return this._allEquipments;
   }
 
+  static getEquipmentBasicInfo(id: number, type: EquipmentType): IEquipmentConfig {
+    return this._candidatesByType[type].find(e => e.id == id);
+  }
+
   static getCandidatesByType(): TCandidatesByType {
     return this._candidatesByType;
   }
