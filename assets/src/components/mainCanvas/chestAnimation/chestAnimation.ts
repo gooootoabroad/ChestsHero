@@ -12,6 +12,9 @@ import { instantiate } from 'cc';
 import { LoadMgr } from '../../../manager/LoadMgr';
 import { EquipmentCatalogMgr } from '../../../manager/EquipmentCatalogMgr';
 import { EquipmentDropMgr } from '../../../manager/EquipmentDropMgr';
+import { Core } from '../../../global/Core';
+import { showEquipmentController } from './showEquipmentController';
+import { randomUUID } from '../../../utils/string';
 const { ccclass, property } = _decorator;
 
 @ccclass('chestAnimation')
@@ -56,6 +59,9 @@ export class chestAnimation extends Component {
 
     @property
     private gUpgradeChancePerStar = 0.03;
+
+    @property(showEquipmentController)
+    private gShowEquipmentScript: showEquipmentController = null;
 
     private gRemainingOpenTimes = 0;
     private gCurrentStar = 1;
@@ -288,7 +294,10 @@ export class chestAnimation extends Component {
 
         // 第 5 次点击：进入出装结算
         this.gIsOpening = true;
-        this.handleOpenRewardTodo().finally(() => {
+        this.playRotate(() => {
+            this.handleOpenReward();
+            this.initProgress();
+            this.playIdle();
             this.gIsOpening = false;
         });
     }
@@ -430,20 +439,29 @@ export class chestAnimation extends Component {
         return Math.max(0, Math.min(1, this.gBaseUpgradeChance - starBonus));
     }
 
-    private async handleOpenRewardTodo() {
-        try {
-            const dropResult = EquipmentDropMgr.roll({
-                star: this.gCurrentStar,
-                candidatesByType: EquipmentCatalogMgr.getCandidatesByType(),
-            });
+    private handleOpenReward() {
+        const dropResult = EquipmentDropMgr.roll({
+            star: this.gCurrentStar,
+            candidatesByType: EquipmentCatalogMgr.getCandidatesByType(),
+        });
 
-            // TODO: 接入“新装备 vs 当前佩戴装备”展示与替换流程，并写入 Core.userInfo.equipments
-            console.log('[Chest] reward flow TODO', {
-                currentStar: this.gCurrentStar,
-                dropResult,
-            });
-        } catch (error) {
-            console.error('[Chest] reward flow error', error);
-        }
+        console.log('[Chest] reward flow ', {
+            currentStar: this.gCurrentStar,
+            dropResult,
+        });
+
+        let uid = randomUUID();
+        // 写入数据库
+        Core.userInfo.equipments.push({
+            id: dropResult.equipmentId,
+            star: 1,
+            grade: dropResult.grade,
+            level: 1,
+            type: dropResult.equipmentType,
+            setId: dropResult.setId,
+            uid: uid,
+        })
+
+        this.gShowEquipmentScript.init(uid);
     }
 }

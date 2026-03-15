@@ -36,7 +36,7 @@ export interface IEquipmentConfig {
   /* 套装技能 */
   setSkill: string;
 
-  /* 属性权重 */
+  /* 属性权重，每升一级按照总数给各属性配置权重 */
   statWeights: IEquipmentStatWeights;
 
   /* 星级技能 */

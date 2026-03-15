@@ -15,7 +15,7 @@ export interface IEquipmentCalcResult {
     battlePower: number;
 }
 
-function calcWeightedValue(weights: IEquipmentStatWeights, budget: number): IEquipmentStats {
+export function calcWeightedValue(weights: IEquipmentStatWeights, budget: number): IEquipmentStats {
     const totalWeight = weights.hp + weights.damage + weights.defense + weights.agility;
     if (totalWeight <= 0) {
         return {

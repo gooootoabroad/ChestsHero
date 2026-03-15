@@ -1,3 +1,4 @@
+import { EquipmentType } from "../config/EquipmentConfig";
 import { EquipmentGradeType } from "../config/EquipmentGradeConfig";
 import { SaveProp } from "../localstorage/SaveProp";
 import { getTodayDateString } from "../utils/string";
@@ -33,6 +34,10 @@ export class UserInfo {
     //所有装备信息
     @SaveProp.decorator([])
     equipments: IUserEquipmentData[];
+
+    // 当前开启箱子获得的装备，还没有替换
+    @SaveProp.decorator(0)
+    newEquipmentID: number;
 
 
     @SaveProp.decorator({})
@@ -129,6 +134,11 @@ export interface IUserEquipmentData {
     id: number;
     star: number;
     grade: EquipmentGradeType;
+    // 级数
+    level: number;
+    type: EquipmentType;
+    // 套装
+    setId: number,
     //当获取时随机生成的id
     uid: string;
 }

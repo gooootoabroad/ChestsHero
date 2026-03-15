@@ -20,27 +20,23 @@ export const ChestGradeRateByStar: Record<ChestStarLevel, IWeightedGradeRate[]> 
     { grade: EquipmentGradeType.B, weight: 5 },
   ],
   2: [
-    { grade: EquipmentGradeType.C, weight: 80 },
-    { grade: EquipmentGradeType.B, weight: 18 },
-    { grade: EquipmentGradeType.A, weight: 2 },
+    { grade: EquipmentGradeType.C, weight: 10 },
+    { grade: EquipmentGradeType.B, weight: 80 },
+    { grade: EquipmentGradeType.A, weight: 10 },
   ],
   3: [
-    { grade: EquipmentGradeType.C, weight: 60 },
-    { grade: EquipmentGradeType.B, weight: 30 },
-    { grade: EquipmentGradeType.A, weight: 9 },
-    { grade: EquipmentGradeType.S, weight: 1 },
-  ],
-  4: [
-    { grade: EquipmentGradeType.C, weight: 35 },
-    { grade: EquipmentGradeType.B, weight: 40 },
-    { grade: EquipmentGradeType.A, weight: 20 },
+    { grade: EquipmentGradeType.B, weight: 50 },
+    { grade: EquipmentGradeType.A, weight: 45 },
     { grade: EquipmentGradeType.S, weight: 5 },
   ],
+  4: [
+    { grade: EquipmentGradeType.B, weight: 10 },
+    { grade: EquipmentGradeType.A, weight: 70 },
+    { grade: EquipmentGradeType.S, weight: 20 },
+  ],
   5: [
-    { grade: EquipmentGradeType.C, weight: 5 },
-    { grade: EquipmentGradeType.B, weight: 40 },
-    { grade: EquipmentGradeType.A, weight: 40 },
-    { grade: EquipmentGradeType.S, weight: 15 },
+    { grade: EquipmentGradeType.A, weight: 50 },
+    { grade: EquipmentGradeType.S, weight: 50 },
   ],
 };
 

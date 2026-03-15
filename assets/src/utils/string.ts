@@ -12,3 +12,13 @@ export function getTodayDateString(): string {
     const d = new Date();
     return d.toISOString().split('T')[0]; // "2025-10-24"
 }
+
+/**
+     * 获取唯一的uuid
+     * @returns 
+     */
+export function randomUUID(): string {
+    const timestamp = Date.now().toString(36);
+    const randomStr = Math.floor(Math.random() * 100000).toString(36);
+    return `${timestamp}${randomStr}`.toUpperCase();
+}
