@@ -6,5 +6,8 @@ export const GEventTarget = new EventTarget();
 
 export enum GEventType {
     GEventGameMusicChange,
-    GeventDiamondChange,
+    GEventDiamondChange,
+
+    // 装备更新
+    GeventEquipmentUpdate,
 }

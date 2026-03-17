@@ -22,22 +22,17 @@ export class UserInfo {
     @SaveProp.decorator(0)
     battlePower: number;
 
-    //已装备的装备信息
-    @SaveProp.decorator({
-        p1: null,
-        p2: null,
-        p3: null,
-        p4: null
-    })
-    equipped: IEquippedData;
+    //已装备的装备信息,存放的uid
+    @SaveProp.decorator([null, null, null, null])
+    equipped: (string | null)[];
 
     //所有装备信息
     @SaveProp.decorator([])
     equipments: IUserEquipmentData[];
 
     // 当前开启箱子获得的装备，还没有替换
-    @SaveProp.decorator(0)
-    newEquipmentID: number;
+    @SaveProp.decorator(null)
+    tempEquipmentUID: string;
 
 
     @SaveProp.decorator({})
@@ -75,8 +70,10 @@ export class UserInfo {
     }
 
     clear() {
-        this._day.clear();
+        this._day?.clear();
         SaveProp.removeObject(this);
+        // 重置内存数据
+        SaveProp.initObject(this);
     }
 }
 
@@ -139,14 +136,8 @@ export interface IUserEquipmentData {
     type: EquipmentType;
     // 套装
     setId: number,
+    // icon
+    icon: string,
     //当获取时随机生成的id
     uid: string;
-}
-
-//已装备的数据,value是uid去我的装备里查，或者null就是没装备
-export interface IEquippedData {
-    p1: string | null;
-    p2: string | null;
-    p3: string | null;
-    p4: string | null;
 }

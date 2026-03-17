@@ -28,6 +28,6 @@ export class goldFinger extends Component {
 
     private AddMoney() {
         Core.userInfo.diamond += 10000;
-        GEventTarget.emit(GEventType.GeventDiamondChange);
+        GEventTarget.emit(GEventType.GEventDiamondChange);
     }
 }

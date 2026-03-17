@@ -1,3 +1,4 @@
+import { Sprite } from "cc";
 import { __private, Asset, AssetManager, assetManager, director, SceneAsset, SpriteFrame } from "cc";
 
 export class LoadMgr {
@@ -74,5 +75,18 @@ export class LoadMgr {
 
     static async loadSpriteFrame(bundle: AssetManager.Bundle, path: string): Promise<SpriteFrame> {
         return await this.loadFile(bundle, path + '/spriteFrame', SpriteFrame);
+    }
+
+    static async loadSprite(bundle: AssetManager.Bundle, path: string, sprite: { spriteFrame: SpriteFrame },) {
+        if (!sprite || sprite['_SFPath'] === path) {
+            return;
+        }
+        sprite['_SFPath'] = path;
+        sprite.spriteFrame = null;
+        LoadMgr.loadSpriteFrame(bundle, path).then(sf => {
+            if (sprite['_SFPath'] === path) {
+                sprite.spriteFrame = sf;
+            }
+        });
     }
 }
