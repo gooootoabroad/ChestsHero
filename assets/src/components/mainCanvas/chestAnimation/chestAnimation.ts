@@ -310,12 +310,11 @@ export class chestAnimation extends Component {
         this.stopIdle();
 
         let callback = () => {
-            // 还原box图片
-            LoadMgr.loadSpriteFrame(Bundle.mainCanvas, "texture/chest/rotate/0").then((sf) => {
-                this.gImageSprite.spriteFrame = sf;
-            });
+
             this.playShadow();
             this.isRotating = false;
+            // 还原box图片
+            LoadMgr.loadSprite(Bundle.mainCanvas, "texture/chest/rotate/0", this.gImageSprite)
             this.playIdle();
             onFinish?.();
         }
@@ -460,7 +459,10 @@ export class chestAnimation extends Component {
             type: dropResult.equipmentType,
             setId: dropResult.setId,
             uid: uid,
+            icon: dropResult.icon,
         })
+
+        Core.userInfo.tempEquipmentUID = uid;
 
         this.gShowEquipmentScript.init(uid);
     }

@@ -41,7 +41,7 @@ export class moneyAD extends Component {
 
         let onSuccess = () => {
             Core.userInfo.diamond += this.gDefaultCount;
-            GEventTarget.emit(GEventType.GeventDiamondChange);
+            GEventTarget.emit(GEventType.GEventDiamondChange);
             isSuccessed = true;
         }
 

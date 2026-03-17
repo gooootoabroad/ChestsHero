@@ -21,11 +21,11 @@ export class moneyController extends Component {
 
     protected start(): void {
         this.updateDiamondLabel();
-        GEventTarget.on(GEventType.GeventDiamondChange, this.updateDiamondLabel, this);
+        GEventTarget.on(GEventType.GEventDiamondChange, this.updateDiamondLabel, this);
     }
 
     protected onDisable(): void {
-        GEventTarget.off(GEventType.GeventDiamondChange, this.updateDiamondLabel, this);
+        GEventTarget.off(GEventType.GEventDiamondChange, this.updateDiamondLabel, this);
     }
 
     private updateDiamondLabel() {

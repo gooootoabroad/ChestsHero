@@ -1,23 +1,29 @@
+import { Label } from 'cc';
+import { Sprite } from 'cc';
 import { _decorator, Component, Node } from 'cc';
+import { IUserEquipmentData } from '../../../global/UserInfo';
+import { EquipmentType, IEquipmentConfig } from '../../../config/EquipmentConfig';
+import { IEquipmentGradeConfig } from '../../../config/EquipmentGradeConfig';
 import { Core } from '../../../global/Core';
 import { EquipmentCatalogMgr } from '../../../manager/EquipmentCatalogMgr';
-import { Sprite } from 'cc';
-import { Label } from 'cc';
-import { EquipmentType, IEquipmentConfig } from '../../../config/EquipmentConfig';
-import { LoadMgr } from '../../../manager/LoadMgr';
 import { Bundle } from '../../../global/bundle';
-import { IUserEquipmentData } from '../../../global/UserInfo';
-import { EquipmentGradeType, IEquipmentGradeConfig } from '../../../config/EquipmentGradeConfig';
-import { Color } from 'cc';
-import { numberToString } from '../../../utils/string';
 import { EquipmentGradeMgr } from '../../../manager/EquipmentGradeMgr';
-import { calcWeightedValue } from '../../../config/EquipmentCalc';
+import { LoadMgr } from '../../../manager/LoadMgr';
+import { Color } from 'cc';
+import { calcEquipmentUpgradeDiamond, calcWeightedValue } from '../../../config/EquipmentCalc';
+import { numberToString } from '../../../utils/string';
 import { EquipmentSuitMgr } from '../../../manager/EquipmentSuitMgr';
+import { Prefab } from 'cc';
+import { instantiate } from 'cc';
+import { UIMgr } from '../../../manager/UIMgr';
+import { moneyAD } from '../../ad/moneyAD';
+import { showOpenNode } from '../../../utils/show';
+import { GEventTarget, GEventType } from '../../../common/event';
 import { getEquipmentCombat } from '../../../manager/User';
 const { ccclass, property } = _decorator;
 
-@ccclass('showEquipment')
-export class showEquipment extends Component {
+@ccclass('showEquipmentInfo')
+export class showEquipmentInfo extends Component {
     /* icon */
     @property(Sprite)
     private gIconSprite: Sprite = null;
@@ -28,7 +34,12 @@ export class showEquipment extends Component {
     @property(Label)
     private gIconTypeLabel: Label = null;
     @property(Label)
+    private gTitleLabel: Label = null;
+    @property(Label)
     private gCombatLabel: Label = null;
+    /* 升级消耗*/
+    @property(Label)
+    private gCostLabel: Label = null;
     // 偷懒
     private gradeLabelColor: string = "";
 
@@ -47,16 +58,40 @@ export class showEquipment extends Component {
     // 已经穿上的套装件数
     private gSetCount: number[] = [0, 0, 0, 0, 0];
 
-    public init(uid: string, setCount: number[]) {
-        this.gSetCount = setCount;
+    private gIsDealing: boolean = false;
+
+    static show(dbData: IUserEquipmentData) {
+        let prefab = Bundle.mainCanvas.get('prefabs/chest/EquipmentInfo', Prefab);
+        let node = instantiate(prefab);
+        node.parent = UIMgr.instance.dialogParent;
+        node.getComponent(showEquipmentInfo).open(dbData);
+    }
+
+    public open(dbData: IUserEquipmentData) {
+        showOpenNode(this.node.children[1], () => { this.init(dbData) });
+    }
+
+    private init(dbData: IUserEquipmentData, isRefresh: boolean = false) {
+        this.gIsDealing = false;
         // 获取装备信息
-        this.gDBEquipmentData = Core.userInfo.equipments.find(e => e.uid === uid);
+        this.gDBEquipmentData = dbData;
         this.gEquipmentBasicData = EquipmentCatalogMgr.getEquipmentBasicInfo(this.gDBEquipmentData.id, this.gDBEquipmentData.type);
         this.gGradeData = EquipmentGradeMgr.getGradeBasicInfo(this.gDBEquipmentData.grade);
-        this.initIcon();
+        if (!isRefresh) {
+            this.initSetCount();
+            this.initIcon();
+        }
         this.initLeftInfo();
         this.initRightInfo();
-        this.gCombatLabel.string = `战力：${getEquipmentCombat(uid)}`;
+        this.initCost();
+        this.gCombatLabel.string = numberToString(getEquipmentCombat(dbData.uid));
+    }
+
+    private initSetCount() {
+        Core.userInfo.equipped.forEach((uid) => {
+            if (!uid) return;
+            this.gSetCount[Core.userInfo.equipments.find(e => e.uid === uid).setId - 1] += 1;
+        })
     }
 
     private initIcon() {
@@ -90,6 +125,8 @@ export class showEquipment extends Component {
         let label = this.gInfoLeftNode.children[0].getComponent(Label);
         label.color = new Color().fromHEX(this.gradeLabelColor);
         label.string = `${this.gEquipmentBasicData.name} Lv${this.gDBEquipmentData.level}`;
+        this.gTitleLabel.color = label.color;
+        this.gTitleLabel.string = this.gEquipmentBasicData.name;
         let basicInfo = calcWeightedValue(this.gEquipmentBasicData.statWeights, this.gGradeData.baseStatBudget);
         let upgradeInfo = calcWeightedValue(this.gEquipmentBasicData.statWeights, this.gGradeData.growthStatBudget * (this.gDBEquipmentData.level - 1));
         this.updateProp(this.gInfoLeftNode.children[1], basicInfo.damage, upgradeInfo.damage);
@@ -148,6 +185,38 @@ export class showEquipment extends Component {
             this.gInfoRightNode.children[1].children[1].children[i].active = false;
             this.gInfoRightNode.children[1].children[2 + i].active = false;
         }
+    }
+
+    private initCost() {
+        this.gCostLabel.string = numberToString(calcEquipmentUpgradeDiamond(this.gGradeData, this.gDBEquipmentData.level));
+    }
+
+    private onUpgradeClick() {
+        if (this.gIsDealing) return;
+        this.gIsDealing = true;
+        // 判断钱够不够
+        let cost = calcEquipmentUpgradeDiamond(this.gGradeData, this.gDBEquipmentData.level);
+        if (Core.userInfo.diamond < cost) {
+            // 钱不够
+            moneyAD.show();
+            this.gIsDealing = false;
+            return;
+        }
+
+        Core.userInfo.diamond -= cost;
+        let item = Core.userInfo.equipments.find(e => e.uid === this.gDBEquipmentData.uid);
+        if (item) {
+            item.level += 1;
+            Core.userInfo.equipments = Core.userInfo.equipments;
+        }
+
+        // 刷新
+        this.init(item, true);
+        GEventTarget.emit(GEventType.GeventEquipmentUpdate, this.gDBEquipmentData.uid, this.gDBEquipmentData.type);
+    }
+
+    private onCloseClick() {
+        this.node.destroy();
     }
 }
 

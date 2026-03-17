@@ -50,7 +50,7 @@ export class shopDailyPrizeItem extends Component {
         if (this.gMoneyType === MoneyEnum.Diamond) {
             Core.userInfo.day.diamondReward = false;
             Core.userInfo.diamond += addDiamondValue;
-            GEventTarget.emit(GEventType.GeventDiamondChange);
+            GEventTarget.emit(GEventType.GEventDiamondChange);
         }
 
         // 更新ui

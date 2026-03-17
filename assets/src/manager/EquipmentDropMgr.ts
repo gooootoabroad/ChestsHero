@@ -17,6 +17,7 @@ export interface IEquipmentDropRollResult {
   grade: EquipmentGradeType;
   star: ChestStarLevel;
   setId: number;
+  icon: string,
 }
 
 export class EquipmentDropMgr {
@@ -43,6 +44,7 @@ export class EquipmentDropMgr {
       grade,
       star,
       setId: pickedEquipment.setId,
+      icon: pickedEquipment.ico,
     };
   }
 
